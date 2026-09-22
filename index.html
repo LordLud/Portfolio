@@ -1,698 +1,274 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alex Mercer | Game Programmer & Designer</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Nicholas Ludowese | Game Programmer & Systems Developer</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        gaming: {
-                            900: '#0b0f19',
-                            800: '#111827',
-                            700: '#1f2937',
-                            accent: '#10b981', // Emerald neon
-                            purple: '#8b5cf6', // Cyber purple
-                            cyan: '#06b6d4',   // Neon cyan
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['Courier New', 'monospace']
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Custom scrollbar and glow effects */
-        ::-webkit-scrollbar {
-            width: 8px;
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #050508;
+            color: #f3f4f6;
+            overflow-x: hidden;
         }
-        ::-webkit-scrollbar-track {
-            background: #0b0f19;
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #1f2937;
-            border-radius: 4px;
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #10b981;
+
+        .glass-card {
+            background: rgba(13, 15, 26, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
         }
-        .neon-glow-cyan {
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
         }
-        .neon-glow-emerald {
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-        }
-        .neon-glow-purple {
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-        }
-        .text-glow {
-            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+
+        .neon-text {
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
         }
     </style>
 </head>
-<body class="bg-gaming-900 text-gray-100 font-sans selection:bg-gaming-accent selection:text-gaming-900">
+<body class="relative min-h-screen">
 
-    <!-- Navigation Bar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-gaming-900/80 backdrop-blur-md border-b border-gray-800 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#hero" class="flex items-center space-x-3 group">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-gaming-accent to-gaming-cyan flex items-center justify-center text-gaming-900 font-bold text-xl group-hover:scale-105 transition-transform">
-                    <i class="fa-solid fa-gamepad"></i>
-                </div>
-                <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-gaming-accent via-gaming-cyan to-gaming-purple bg-clip-text text-transparent">
-                    ALEX.DEV
-                </span>
-            </a>
-            
-            <!-- Desktop Nav -->
-            <div class="hidden md:flex items-center space-x-8 font-medium">
-                <a href="#projects" class="hover:text-gaming-accent transition-colors">Projects</a>
-                <a href="#skills" class="hover:text-gaming-accent transition-colors">Skills & Stack</a>
-                <a href="#about" class="hover:text-gaming-accent transition-colors">About</a>
-                <a href="#contact" class="hover:text-gaming-accent transition-colors">Contact</a>
-                <a href="#projects" class="px-4 py-2 rounded-lg bg-gaming-accent/10 border border-gaming-accent text-gaming-accent hover:bg-gaming-accent hover:text-gaming-900 transition-all font-semibold text-sm">
-                    Play Demos
-                </a>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-card border-b border-gray-800/50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="font-mono text-xl font-bold tracking-wider text-blue-400 neon-text">NL_DEV</a>
+            <div class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#about" class="hover:text-blue-400 transition">About</a>
+                <a href="#experience" class="hover:text-blue-400 transition">Experience</a>
+                <a href="#projects" class="hover:text-blue-400 transition">Projects</a>
+                <a href="#skills" class="hover:text-blue-400 transition">Skills</a>
+                <a href="#contact" class="hover:text-blue-400 transition">Contact</a>
             </div>
-
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
-                <i class="fa-solid fa-bars text-2xl"></i>
-            </button>
-        </div>
-
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-gaming-800 border-b border-gray-700 px-4 pt-2 pb-6 space-y-3">
-            <a href="#projects" class="block py-2 hover:text-gaming-accent transition-colors">Projects</a>
-            <a href="#skills" class="block py-2 hover:text-gaming-accent transition-colors">Skills & Stack</a>
-            <a href="#about" class="block py-2 hover:text-gaming-accent transition-colors">About</a>
-            <a href="#contact" class="block py-2 hover:text-gaming-accent transition-colors">Contact</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        <!-- Interactive Canvas Background -->
-        <canvas id="hero-canvas" class="absolute inset-0 z-0 pointer-events-auto"></canvas>
-        <div class="absolute inset-0 bg-gradient-to-b from-gaming-900/40 via-gaming-900/70 to-gaming-900 z-1 pointer-events-none"></div>
-
-        <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gaming-accent/10 border border-gaming-accent/30 text-gaming-accent text-xs sm:text-sm font-mono mb-6 animate-pulse">
-                <span class="w-2 h-2 rounded-full bg-gaming-accent"></span>
-                <span>AVAILABLE FOR CONTRACT & FULL-TIME ROLES</span>
+    <header class="min-h-screen flex items-center justify-center pt-20 px-6">
+        <div class="max-w-4xl text-center">
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full glass-card text-blue-400 font-mono text-xs uppercase tracking-widest border border-blue-500/30">
+                Game Programmer & Systems Developer
             </div>
-            
-            <h1 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight mb-6">
-                Crafting Immersive <br>
-                <span class="bg-gradient-to-r from-gaming-accent via-gaming-cyan to-gaming-purple bg-clip-text text-transparent text-glow">
-                    Worlds & Game Systems
-                </span>
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+                Nicholas <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Ludowese</span>
             </h1>
-            
-            <p class="max-w-2xl mx-auto text-lg sm:text-xl text-gray-400 mb-10">
-                Hi, I'm Alex. A passionate Gameplay Programmer & Technical Designer specializing in high-performance C++/C# architecture, Unreal Engine 5, Unity, and captivating pixel art mechanics.
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+                Versatile developer experienced in building mechanics, VR applications, and online infrastructure across multiple platform builds using C++ and Unreal Engine.
             </p>
-            
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#projects" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gaming-accent text-gaming-900 font-bold hover:bg-emerald-400 transition-all neon-glow-emerald flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-gamepad"></i>
-                    <span>Explore Projects</span>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#projects" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-8 py-3 rounded-xl transition shadow-lg shadow-blue-600/30">
+                    View Experience & Games
                 </a>
-                <a href="#contact" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gaming-800/80 hover:bg-gaming-700 border border-gray-700 text-white font-bold transition-all flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    <span>Get in Touch</span>
+                <a href="#contact" class="glass-card hover:bg-gray-800/80 text-gray-200 font-medium px-8 py-3 rounded-xl transition border border-gray-700">
+                    Get in Touch
                 </a>
-            </div>
-
-            <!-- Quick Tech Badges -->
-            <div class="mt-16 pt-8 border-t border-gray-800/80 flex flex-wrap items-center justify-center gap-6 text-gray-400 text-sm font-mono">
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-code text-gaming-cyan"></i><span>C++ & C# Expert</span></div>
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-cube text-gaming-purple"></i><span>Unreal Engine 5</span></div>
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-laptop-code text-gaming-accent"></i><span>Unity Engine</span></div>
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-paintbrush text-amber-400"></i><span>Pixel Art & Design</span></div>
             </div>
         </div>
     </header>
 
-    <!-- Projects Section -->
-    <section id="projects" class="py-24 bg-gaming-800/50 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6 max-w-6xl mx-auto">
+        <div class="glass-card p-8 md:p-12 rounded-3xl">
+            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-terminal text-blue-400"></i> Professional Overview
+            </h2>
+            <p class="text-gray-300 text-base md:text-lg leading-relaxed mb-6">
+                Proven track record in C++ and Unreal Engine development, implementing multiplayer systems, interactive UI, and artificial intelligence. Skilled in streamlining technical workflows, leading interactive mechanics design, and delivering functional cross-platform builds in fast-paced production environments.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-800">
                 <div>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold mb-3">Featured Projects</h2>
-                    <p class="text-gray-400 max-w-xl">Explore my recent work in gameplay programming, custom game engine systems, and pixel art indie titles.</p>
+                    <h3 class="font-mono text-blue-400 text-sm mb-1">LOCATION</h3>
+                    <p class="text-gray-300">Rittman, Ohio</p>
                 </div>
-                
-                <!-- Filter Buttons -->
-                <div class="mt-6 md:mt-0 flex flex-wrap gap-2" id="filter-container">
-                    <button data-filter="all" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-gaming-accent text-gaming-900 transition-all">All</button>
-                    <button data-filter="gameplay" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-gaming-700 text-gray-300 hover:bg-gaming-600 transition-all">Gameplay Programming</button>
-                    <button data-filter="systems" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-gaming-700 text-gray-300 hover:bg-gaming-600 transition-all">Engine & Systems</button>
-                    <button data-filter="pixel" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-gaming-700 text-gray-300 hover:bg-gaming-600 transition-all">Pixel Art / Design</button>
+                <div>
+                    <h3 class="font-mono text-blue-400 text-sm mb-1">EDUCATION</h3>
+                    <p class="text-gray-300">B.S. Digital Simulation & Game Engineering Tech, Shawnee State University</p>
                 </div>
-            </div>
-
-            <!-- Project Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
-                
-                <!-- Project 1 -->
-                <div class="project-card group bg-gaming-800 rounded-2xl overflow-hidden border border-gray-700/60 hover:border-gaming-accent transition-all duration-300 flex flex-col" data-category="gameplay">
-                    <div class="relative h-56 overflow-hidden bg-gray-900">
-                        <img src="https://placehold.co/600x400/111827/10b981?text=Aether+Blade" alt="Aether Blade" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111827/ffffff?text=Image+Unavailable'">
-                        <div class="absolute top-3 right-3 bg-gaming-900/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-gaming-accent border border-gaming-accent/30">
-                            Unreal Engine 5
-                        </div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center space-x-2 mb-2">
-                                <span class="px-2 py-0.5 rounded bg-gaming-cyan/10 text-gaming-cyan text-xs font-mono">Gameplay Programming</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-gaming-accent transition-colors">Aether Blade (Action RPG)</h3>
-                            <p class="text-gray-400 text-sm line-clamp-3 mb-4">
-                                Developed fluid melee combat mechanics, custom hitbox detection systems, and dynamic enemy AI behavior trees using C++ and Blueprints.
-                            </p>
-                        </div>
-                        <div class="pt-4 border-t border-gray-700/60 flex items-center justify-between">
-                            <span class="text-xs text-gray-400 font-mono">Role: Lead Gameplay Dev</span>
-                            <button onclick="openModal('aether')" class="px-3 py-1.5 rounded-lg bg-gaming-700 hover:bg-gaming-accent hover:text-gaming-900 text-xs font-bold transition-all flex items-center space-x-1.5">
-                                <span>Details</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
+                <div>
+                    <h3 class="font-mono text-blue-400 text-sm mb-1">CERTIFICATION</h3>
+                    <p class="text-gray-300">Google Cybersecurity Certification</p>
                 </div>
-
-                <!-- Project 2 -->
-                <div class="project-card group bg-gaming-800 rounded-2xl overflow-hidden border border-gray-700/60 hover:border-gaming-accent transition-all duration-300 flex flex-col" data-category="systems">
-                    <div class="relative h-56 overflow-hidden bg-gray-900">
-                        <img src="https://placehold.co/600x400/111827/06b6d4?text=Voxel+Engine" alt="Voxel Engine" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111827/ffffff?text=Image+Unavailable'">
-                        <div class="absolute top-3 right-3 bg-gaming-900/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-gaming-cyan border border-gaming-cyan/30">
-                            C++ / OpenGL
-                        </div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center space-x-2 mb-2">
-                                <span class="px-2 py-0.5 rounded bg-gaming-purple/10 text-gaming-purple text-xs font-mono">Engine & Systems</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-gaming-accent transition-colors">Custom Voxel Sandbox Engine</h3>
-                            <p class="text-gray-400 text-sm line-clamp-3 mb-4">
-                                Built a high-performance multithreaded voxel terrain generator from scratch with greedy meshing, octree culling, and custom shader pipelines.
-                            </p>
-                        </div>
-                        <div class="pt-4 border-t border-gray-700/60 flex items-center justify-between">
-                            <span class="text-xs text-gray-400 font-mono">Role: Core Engine Programmer</span>
-                            <button onclick="openModal('voxel')" class="px-3 py-1.5 rounded-lg bg-gaming-700 hover:bg-gaming-accent hover:text-gaming-900 text-xs font-bold transition-all flex items-center space-x-1.5">
-                                <span>Details</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="project-card group bg-gaming-800 rounded-2xl overflow-hidden border border-gray-700/60 hover:border-gaming-accent transition-all duration-300 flex flex-col" data-category="pixel">
-                    <div class="relative h-56 overflow-hidden bg-gray-900">
-                        <img src="https://placehold.co/600x400/111827/8b5cf6?text=Neon+Drifter" alt="Neon Drifter" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111827/ffffff?text=Image+Unavailable'">
-                        <div class="absolute top-3 right-3 bg-gaming-900/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-gaming-purple border border-gaming-purple/30">
-                            Unity / C#
-                        </div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center space-x-2 mb-2">
-                                <span class="px-2 py-0.5 rounded bg-amber-400/10 text-amber-400 text-xs font-mono">Pixel Art / Design</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-gaming-accent transition-colors">Neon Drifter (Cyberpunk Metroidvania)</h3>
-                            <p class="text-gray-400 text-sm line-clamp-3 mb-4">
-                                Designed and programmed a 2D platformer. Created all 64x64 pixel art sprites, custom character controllers, and modular particle systems.
-                            </p>
-                        </div>
-                        <div class="pt-4 border-t border-gray-700/60 flex items-center justify-between">
-                            <span class="text-xs text-gray-400 font-mono">Role: Solo Developer & Artist</span>
-                            <button onclick="openModal('neon')" class="px-3 py-1.5 rounded-lg bg-gaming-700 hover:bg-gaming-accent hover:text-gaming-900 text-xs font-bold transition-all flex items-center space-x-1.5">
-                                <span>Details</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="project-card group bg-gaming-800 rounded-2xl overflow-hidden border border-gray-700/60 hover:border-gaming-accent transition-all duration-300 flex flex-col" data-category="systems">
-                    <div class="relative h-56 overflow-hidden bg-gray-900">
-                        <img src="https://placehold.co/600x400/111827/10b981?text=ECS+Inventory" alt="ECS Inventory" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111827/ffffff?text=Image+Unavailable'">
-                        <div class="absolute top-3 right-3 bg-gaming-900/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-gaming-accent border border-gaming-accent/30">
-                            C++ / Custom ECS
-                        </div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center space-x-2 mb-2">
-                                <span class="px-2 py-0.5 rounded bg-gaming-purple/10 text-gaming-purple text-xs font-mono">Engine & Systems</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-gaming-accent transition-colors">Data-Oriented Inventory & Loot System</h3>
-                            <p class="text-gray-400 text-sm line-clamp-3 mb-4">
-                                A high-throughput inventory backend built on an Entity-Component-System architecture capable of managing 10,000+ items with zero frame drop.
-                            </p>
-                        </div>
-                        <div class="pt-4 border-t border-gray-700/60 flex items-center justify-between">
-                            <span class="text-xs text-gray-400 font-mono">Role: Systems Architect</span>
-                            <button onclick="openModal('ecs')" class="px-3 py-1.5 rounded-lg bg-gaming-700 hover:bg-gaming-accent hover:text-gaming-900 text-xs font-bold transition-all flex items-center space-x-1.5">
-                                <span>Details</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 5 -->
-                <div class="project-card group bg-gaming-800 rounded-2xl overflow-hidden border border-gray-700/60 hover:border-gaming-accent transition-all duration-300 flex flex-col" data-category="gameplay">
-                    <div class="relative h-56 overflow-hidden bg-gray-900">
-                        <img src="https://placehold.co/600x400/111827/06b6d4?text=Chrono+Tactics" alt="Chrono Tactics" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111827/ffffff?text=Image+Unavailable'">
-                        <div class="absolute top-3 right-3 bg-gaming-900/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-gaming-cyan border border-gaming-cyan/30">
-                            Unity / C#
-                        </div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center space-x-2 mb-2">
-                                <span class="px-2 py-0.5 rounded bg-gaming-cyan/10 text-gaming-cyan text-xs font-mono">Gameplay Programming</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-gaming-accent transition-colors">Chrono Tactics (Turn-Based Strategy)</h3>
-                            <p class="text-gray-400 text-sm line-clamp-3 mb-4">
-                                Engineered time-manipulation game loops allowing players to rewind turns, predictable pathfinding grid algorithms, and state command pattern.
-                            </p>
-                        </div>
-                        <div class="pt-4 border-t border-gray-700/60 flex items-center justify-between">
-                            <span class="text-xs text-gray-400 font-mono">Role: Gameplay Engineer</span>
-                            <button onclick="openModal('chrono')" class="px-3 py-1.5 rounded-lg bg-gaming-700 hover:bg-gaming-accent hover:text-gaming-900 text-xs font-bold transition-all flex items-center space-x-1.5">
-                                <span>Details</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 6 -->
-                <div class="project-card group bg-gaming-800 rounded-2xl overflow-hidden border border-gray-700/60 hover:border-gaming-accent transition-all duration-300 flex flex-col" data-category="pixel">
-                    <div class="relative h-56 overflow-hidden bg-gray-900">
-                        <img src="https://placehold.co/600x400/111827/f59e0b?text=Dungeon+Crawler" alt="Dungeon Crawler UI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111827/ffffff?text=Image+Unavailable'">
-                        <div class="absolute top-3 right-3 bg-gaming-900/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-amber-400 border border-amber-400/30">
-                            Godot / GDScript
-                        </div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center space-x-2 mb-2">
-                                <span class="px-2 py-0.5 rounded bg-amber-400/10 text-amber-400 text-xs font-mono">Pixel Art / Design</span>
-                            </div>
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-gaming-accent transition-colors">Retro Roguelike UI & Tilemaps</h3>
-                            <p class="text-gray-400 text-sm line-clamp-3 mb-4">
-                                Designed retro CRT shaders, procedural dungeon generation algorithms, and complete pixel art UI asset packs for a classic dungeon crawler.
-                            </p>
-                        </div>
-                        <div class="pt-4 border-t border-gray-700/60 flex items-center justify-between">
-                            <span class="text-xs text-gray-400 font-mono">Role: Technical Designer</span>
-                            <button onclick="openModal('roguelike')" class="px-3 py-1.5 rounded-lg bg-gaming-700 hover:bg-gaming-accent hover:text-gaming-900 text-xs font-bold transition-all flex items-center space-x-1.5">
-                                <span>Details</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>
 
-    <!-- Skills & Stack Section -->
-    <section id="skills" class="py-24 bg-gaming-900 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold mb-3">Skills & Technical Stack</h2>
-                <p class="text-gray-400">My toolkit spans low-level game engine architecture, high-level gameplay scripting, and visual design assets.</p>
+    <!-- Professional Experience Section -->
+    <section id="experience" class="py-20 px-6 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold mb-12 text-center">Professional Experience</h2>
+        <div class="space-y-6">
+            
+            <div class="glass-card p-6 md:p-8 rounded-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-blue-400">Part-Owner / Lead Systems & Gameplay Programmer</h3>
+                        <p class="text-gray-400 text-sm">Auntie Hero Games • Remote</p>
+                    </div>
+                    <span class="font-mono text-xs bg-blue-950 text-blue-300 px-3 py-1 rounded-full border border-blue-800 mt-2 md:mt-0">2026 - Present</span>
+                </div>
+                <p class="text-gray-300 mb-4 text-sm">Co-founded the studio and engineered foundational gameplay architecture, enemy behaviors, and progression mechanics for the unreleased title <strong>Rest Assured</strong>.</p>
+                <ul class="list-disc list-inside text-gray-400 text-sm space-y-2">
+                    <li>Co-designed core gameplay systems and puzzle mechanics to establish primary gameplay loops.</li>
+                    <li>Programmed a custom dynamic inventory system to handle real-time item tracking, state updates, and UI integration.</li>
+                    <li>Developed specialized Zombie AI behavior systems, pathfinding logic, and combat engagement patterns.</li>
+                </ul>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                
-                <!-- Category 1: Programming Languages -->
-                <div class="bg-gaming-800/80 border border-gray-700/70 rounded-2xl p-6 hover:border-gaming-cyan transition-all">
-                    <div class="w-12 h-12 rounded-xl bg-gaming-cyan/10 border border-gaming-cyan/30 flex items-center justify-center text-gaming-cyan text-xl mb-4">
-                        <i class="fa-solid fa-code"></i>
+            <div class="glass-card p-6 md:p-8 rounded-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-blue-400">Gameplay Programmer</h3>
+                        <p class="text-gray-400 text-sm">GhostJam Games • Remote</p>
                     </div>
-                    <h3 class="text-xl font-bold mb-4">Languages</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">C++</span>
-                                <span class="text-gaming-cyan font-mono">95%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-cyan h-full rounded-full" style="width: 95%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">C#</span>
-                                <span class="text-gaming-cyan font-mono">90%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-cyan h-full rounded-full" style="width: 90%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">HLSL / GLSL</span>
-                                <span class="text-gaming-cyan font-mono">75%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-cyan h-full rounded-full" style="width: 75%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Python / GDScript</span>
-                                <span class="text-gaming-cyan font-mono">80%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-cyan h-full rounded-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <span class="font-mono text-xs bg-blue-950 text-blue-300 px-3 py-1 rounded-full border border-blue-800 mt-2 md:mt-0">2025 - Present</span>
                 </div>
-
-                <!-- Category 2: Game Engines -->
-                <div class="bg-gaming-800/80 border border-gray-700/70 rounded-2xl p-6 hover:border-gaming-accent transition-all">
-                    <div class="w-12 h-12 rounded-xl bg-gaming-accent/10 border border-gaming-accent/30 flex items-center justify-center text-gaming-accent text-xl mb-4">
-                        <i class="fa-solid fa-cube"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Game Engines</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Unreal Engine 5</span>
-                                <span class="text-gaming-accent font-mono">90%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-accent h-full rounded-full" style="width: 90%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Unity Engine</span>
-                                <span class="text-gaming-accent font-mono">95%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-accent h-full rounded-full" style="width: 95%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Godot Engine</span>
-                                <span class="text-gaming-accent font-mono">80%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-accent h-full rounded-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Custom C++ Engines</span>
-                                <span class="text-gaming-accent font-mono">85%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-accent h-full rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Category 3: Systems & Architecture -->
-                <div class="bg-gaming-800/80 border border-gray-700/70 rounded-2xl p-6 hover:border-gaming-purple transition-all">
-                    <div class="w-12 h-12 rounded-xl bg-gaming-purple/10 border border-gaming-purple/30 flex items-center justify-center text-gaming-purple text-xl mb-4">
-                        <i class="fa-solid fa-network-wired"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Systems & Architecture</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Gameplay Mechanics</span>
-                                <span class="text-gaming-purple font-mono">95%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-purple h-full rounded-full" style="width: 95%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">AI Behavior Trees</span>
-                                <span class="text-gaming-purple font-mono">88%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-purple h-full rounded-full" style="width: 88%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Multiplayer / Netcode</span>
-                                <span class="text-gaming-purple font-mono">80%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-purple h-full rounded-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Physics & Collision</span>
-                                <span class="text-gaming-purple font-mono">85%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-gaming-purple h-full rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Category 4: Art & Design -->
-                <div class="bg-gaming-800/80 border border-gray-700/70 rounded-2xl p-6 hover:border-amber-400 transition-all">
-                    <div class="w-12 h-12 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 text-xl mb-4">
-                        <i class="fa-solid fa-paintbrush"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Art & Design</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Pixel Art & Animation</span>
-                                <span class="text-amber-400 font-mono">90%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-amber-400 h-full rounded-full" style="width: 90%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">UI / UX Design</span>
-                                <span class="text-amber-400 font-mono">85%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-amber-400 h-full rounded-full" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Level Design</span>
-                                <span class="text-amber-400 font-mono">88%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-amber-400 h-full rounded-full" style="width: 88%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-medium">Shader Graph / VFX</span>
-                                <span class="text-amber-400 font-mono">82%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                                <div class="bg-amber-400 h-full rounded-full" style="width: 82%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <p class="text-gray-300 mb-4 text-sm">Engineered core gameplay systems and interactive environments for the title <strong>Backseat Drivers</strong> (grossed over one million dollars on Steam with overall positive reviews).</p>
+                <ul class="list-disc list-inside text-gray-400 text-sm space-y-2">
+                    <li>Programmed responsive UI systems for menu navigation and user flow.</li>
+                    <li>Designed custom maps and gameplay obstacles to enhance player progression and mechanics interaction.</li>
+                    <li>Conducted QA testing and mechanic debugging to ensure optimal stability and gameplay responsiveness.</li>
+                </ul>
             </div>
+
+            <div class="glass-card p-6 md:p-8 rounded-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-blue-400">UI Programmer</h3>
+                        <p class="text-gray-400 text-sm">Aexlab • Remote</p>
+                    </div>
+                    <span class="font-mono text-xs bg-blue-950 text-blue-300 px-3 py-1 rounded-full border border-blue-800 mt-2 md:mt-0">2024 - 2025</span>
+                </div>
+                <p class="text-gray-300 mb-4 text-sm">Optimized user interface architecture and user engagement systems for high-performance virtual reality applications.</p>
+                <ul class="list-disc list-inside text-gray-400 text-sm space-y-2">
+                    <li>Refactored and updated existing UI assets to meet strict framerate and visual performance targets in VR.</li>
+                    <li>Programmed 2D menu systems and 3D active in-world widgets for fully immersive VR player interaction.</li>
+                    <li>Integrated lobbies, custom match flows, and session management leveraging Redpoint and Epic Online Services.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card p-6 md:p-8 rounded-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-blue-400">Programmer 1</h3>
+                        <p class="text-gray-400 text-sm">Visual Purple / Fractal Blue Entertainment • Meridian, Idaho</p>
+                    </div>
+                    <span class="font-mono text-xs bg-blue-950 text-blue-300 px-3 py-1 rounded-full border border-blue-800 mt-2 md:mt-0">2022 - 2024</span>
+                </div>
+                <p class="text-gray-300 mb-4 text-sm">Developed core gameplay features, player hubs, and networking for VR simulation projects and commercial titles like <strong>Scrap Age</strong>.</p>
+                <ul class="list-disc list-inside text-gray-400 text-sm space-y-2">
+                    <li>Built online infrastructure, including matchmaking and stats tracking using Epic Online Services (EOS).</li>
+                    <li>Utilized Unreal Engine 5's Gameplay Ability System (GAS) to create extensible combat and player capability modules.</li>
+                    <li>Managed build pipelines for cross-platform releases on iOS, Android, Linux, Meta Quest 2, and PC.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card p-6 md:p-8 rounded-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-blue-400">General Programmer</h3>
+                        <p class="text-gray-400 text-sm">Regen Collective LLC • Remote</p>
+                    </div>
+                    <span class="font-mono text-xs bg-blue-950 text-blue-300 px-3 py-1 rounded-full border border-blue-800 mt-2 md:mt-0">2021 - 2022</span>
+                </div>
+                <ul class="list-disc list-inside text-gray-400 text-sm space-y-2">
+                    <li>Engineered backend functionality using C++ and Blueprints for an unannounced video game project.</li>
+                    <li>Designed and implemented enemy AI behavior trees and tactical systems.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card p-6 md:p-8 rounded-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-blue-400">Teacher & Contractor</h3>
+                        <p class="text-gray-400 text-sm">Coderize Global & Mean Cat Entertainment • Remote</p>
+                    </div>
+                    <span class="font-mono text-xs bg-blue-950 text-blue-300 px-3 py-1 rounded-full border border-blue-800 mt-2 md:mt-0">2021 - 2022</span>
+                </div>
+                <ul class="list-disc list-inside text-gray-400 text-sm space-y-2">
+                    <li>Instructed students in Java and Python programming concepts at Coderize Global, fostering collaborative learning.</li>
+                    <li>Developed virtual camera components within Unreal Engine using C++ and Blueprints for Mean Cat Entertainment.</li>
+                </ul>
+            </div>
+
         </div>
     </section>
 
-    <!-- About Me Section -->
-    <section id="about" class="py-24 bg-gaming-800/40 border-t border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gaming-purple/10 border border-gaming-purple/30 text-gaming-purple text-xs font-mono mb-4">
-                        <span>THE DEV BEHIND THE SCREEN</span>
-                    </div>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Bridging Code Precision with Creative Vision</h2>
-                    <p class="text-gray-300 mb-4 leading-relaxed">
-                        Hello! I'm Alex, a dedicated game programmer with over 6 years of experience building interactive experiences. Whether I'm deep in C++ memory management, fine-tuning Unreal Engine movement physics, or drawing pixel art sprites frame-by-frame, I thrive at the intersection of rigorous technical engineering and artistic storytelling.
-                    </p>
-                    <p class="text-gray-400 mb-8 leading-relaxed">
-                        My philosophy is simple: great games feel responsive, run at silky-smooth frame rates, and immerse players into worlds that feel alive. I've shipped 4 indie titles on Steam and contributed to various technical middleware systems.
-                    </p>
-                    
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 font-mono">
-                        <div class="bg-gaming-800 p-4 rounded-xl border border-gray-700/60">
-                            <div class="text-3xl font-black text-gaming-accent mb-1">6+</div>
-                            <div class="text-xs text-gray-400">Years Experience</div>
-                        </div>
-                        <div class="bg-gaming-800 p-4 rounded-xl border border-gray-700/60">
-                            <div class="text-3xl font-black text-gaming-cyan mb-1">12+</div>
-                            <div class="text-xs text-gray-400">Shipped Projects</div>
-                        </div>
-                        <div class="bg-gaming-800 p-4 rounded-xl border border-gray-700/60 col-span-2 sm:col-span-1">
-                            <div class="text-3xl font-black text-gaming-purple mb-1">100%</div>
-                            <div class="text-xs text-gray-400">Passion for Games</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative">
-                    <div class="relative rounded-2xl overflow-hidden border border-gray-700 bg-gaming-900 shadow-2xl p-2">
-                        <img src="https://placehold.co/600x500/111827/10b981?text=Dev+Setup+%26+Code" alt="Developer Setup" class="rounded-xl w-full h-auto object-cover opacity-90" onerror="this.src='https://placehold.co/600x500/111827/ffffff?text=Image+Unavailable'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gaming-900 via-transparent to-transparent pointer-events-none"></div>
-                        <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-gaming-900/90 backdrop-blur-md border border-gray-700 font-mono text-xs text-gray-300">
-                            <div class="text-gaming-accent font-bold mb-1">// CURRENTLY WORKING ON</div>
-                            <p>Unreal Engine 5.4 Open World Procedural Biome Generator & Custom Network Replication Systems.</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- Key Expertise Section -->
+    <section id="skills" class="py-20 px-6 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold mb-12 text-center">Key Expertise & Skills</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="glass-card p-6 rounded-2xl text-center">
+                <i class="fa-solid fa-code text-3xl text-blue-400 mb-3"></i>
+                <h3 class="font-bold mb-1">Languages</h3>
+                <p class="text-gray-400 text-sm">C++, C#, Python, Java, HTML</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center">
+                <i class="fa-solid fa-cube text-3xl text-blue-400 mb-3"></i>
+                <h3 class="font-bold mb-1">Engines</h3>
+                <p class="text-gray-400 text-sm">Unreal Engine (UE4/UE5)</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center">
+                <i class="fa-solid fa-network-wired text-3xl text-blue-400 mb-3"></i>
+                <h3 class="font-bold mb-1">Multiplayer & Systems</h3>
+                <p class="text-gray-400 text-sm">EOS, GAS, Redpoint</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center">
+                <i class="fa-solid fa-vr-cardboard text-3xl text-blue-400 mb-3"></i>
+                <h3 class="font-bold mb-1">VR & Platforms</h3>
+                <p class="text-gray-400 text-sm">Quest 2, Cross-Platform Build Pipelines</p>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-gaming-900 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                
-                <div>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold mb-4">Let's Build Something Epic Together</h2>
-                    <p class="text-gray-400 mb-8">
-                        Have a game project in mind, looking for a gameplay programmer, or just want to chat about game dev tech? Send me a message!
-                    </p>
-                    
-                    <div class="space-y-6">
-                        <a href="mailto:alex.mercer.gamedev@example.com" class="flex items-center space-x-4 p-4 rounded-xl bg-gaming-800 border border-gray-700/60 hover:border-gaming-accent transition-all group">
-                            <div class="w-12 h-12 rounded-lg bg-gaming-accent/10 flex items-center justify-center text-gaming-accent text-xl group-hover:bg-gaming-accent group-hover:text-gaming-900 transition-colors">
-                                <i class="fa-solid fa-envelope"></i>
-                            </div>
-                            <div>
-                                <div class="text-xs text-gray-400 font-mono">EMAIL ME</div>
-                                <div class="text-white font-semibold">alex.mercer.gamedev@example.com</div>
-                            </div>
-                        </a>
-
-                        <div class="flex items-center space-x-4 p-4 rounded-xl bg-gaming-800 border border-gray-700/60">
-                            <div class="w-12 h-12 rounded-lg bg-gaming-cyan/10 flex items-center justify-center text-gaming-cyan text-xl">
-                                <i class="fa-solid fa-location-dot"></i>
-                            </div>
-                            <div>
-                                <div class="text-xs text-gray-400 font-mono">LOCATION</div>
-                                <div class="text-white font-semibold">San Francisco, CA (Remote Available)</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Social Links -->
-                    <div class="mt-8 flex items-center space-x-4">
-                        <a href="https://github.com" target="_blank" class="w-12 h-12 rounded-xl bg-gaming-800 hover:bg-gaming-700 border border-gray-700 flex items-center justify-center text-gray-300 hover:text-gaming-accent transition-all">
-                            <i class="fa-brands fa-github text-xl"></i>
-                        </a>
-                        <a href="https://linkedin.com" target="_blank" class="w-12 h-12 rounded-xl bg-gaming-800 hover:bg-gaming-700 border border-gray-700 flex items-center justify-center text-gray-300 hover:text-gaming-accent transition-all">
-                            <i class="fa-brands fa-linkedin-in text-xl"></i>
-                        </a>
-                        <a href="https://twitter.com" target="_blank" class="w-12 h-12 rounded-xl bg-gaming-800 hover:bg-gaming-700 border border-gray-700 flex items-center justify-center text-gray-300 hover:text-gaming-accent transition-all">
-                            <i class="fa-brands fa-x-twitter text-xl"></i>
-                        </a>
-                        <a href="https://itch.io" target="_blank" class="w-12 h-12 rounded-xl bg-gaming-800 hover:bg-gaming-700 border border-gray-700 flex items-center justify-center text-gray-300 hover:text-gaming-accent transition-all">
-                            <i class="fa-brands fa-itch-io text-xl"></i>
-                        </a>
-                        <a href="https://discord.com" target="_blank" class="w-12 h-12 rounded-xl bg-gaming-800 hover:bg-gaming-700 border border-gray-700 flex items-center justify-center text-gray-300 hover:text-gaming-accent transition-all">
-                            <i class="fa-brands fa-discord text-xl"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Contact Form -->
-                <div class="bg-gaming-800/80 border border-gray-700/70 rounded-2xl p-8">
-                    <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Your Name</label>
-                            <input type="text" id="sender-name" required class="w-full px-4 py-3 rounded-xl bg-gaming-900 border border-gray-700 text-white focus:outline-none focus:border-gaming-accent transition-colors" placeholder="John Doe">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
-                            <input type="email" id="sender-email" required class="w-full px-4 py-3 rounded-xl bg-gaming-900 border border-gray-700 text-white focus:outline-none focus:border-gaming-accent transition-colors" placeholder="john@example.com">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Message</label>
-                            <textarea id="sender-msg" rows="4" required class="w-full px-4 py-3 rounded-xl bg-gaming-900 border border-gray-700 text-white focus:outline-none focus:border-gaming-accent transition-colors" placeholder="Tell me about your game or project..."></textarea>
-                        </div>
-                        <button type="submit" class="w-full py-4 rounded-xl bg-gaming-accent text-gaming-900 font-bold hover:bg-emerald-400 transition-all neon-glow-emerald flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            <span>Send Message</span>
-                        </button>
-                    </form>
-                    <div id="form-success" class="hidden mt-4 p-4 rounded-xl bg-gaming-accent/10 border border-gaming-accent text-gaming-accent text-center font-medium">
-                        Message sent successfully! I'll get back to you soon.
-                    </div>
-                </div>
-
+    <section id="contact" class="py-20 px-6 max-w-4xl mx-auto text-center">
+        <div class="glass-card p-10 rounded-3xl">
+            <h2 class="text-3xl font-bold mb-4">Let's Build Something Together</h2>
+            <p class="text-gray-400 mb-8">Reach out for opportunities, contract work, or game development discussions.</p>
+            <div class="flex flex-col md:flex-row justify-center gap-6 text-lg">
+                <a href="mailto:nludowese@yahoo.com" class="text-blue-400 hover:underline flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-envelope"></i> nludowese@yahoo.com
+                </a>
+                <span class="text-gray-600 hidden md:inline">•</span>
+                <a href="tel:3309575258" class="text-blue-400 hover:underline flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-phone"></i> 330-957-5258
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Project Modal -->
-    <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4">
-        <div class="bg-gaming-800 border border-gray-700 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative p-6 sm:p-8 shadow-2xl">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-white text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div id="modal-content">
-                <!-- Dynamically populated via JS -->
-            </div>
-        </div>
-    </div>
-
     <!-- Footer -->
-    <footer class="bg-gaming-900 border-t border-gray-800 py-8 text-center text-gray-500 text-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>© 2026 Alex Mercer. All rights reserved. Built with passion & C++.</div>
-            <div class="flex space-x-6">
-                <a href="#projects" class="hover:text-gaming-accent transition-colors">Projects</a>
-                <a href="#skills" class="hover:text-gaming-accent transition-colors">Skills</a>
-                <a href="#about" class="hover:text-gaming-accent transition-colors">About</a>
-                <a href="#contact" class="hover:text-gaming-accent transition-colors">Contact</a>
-            </div>
-        </div>
+    <footer class="py-8 text-center text-gray-600 text-sm border-t border-gray-900">
+        <p>© 2026 Nicholas Ludowese. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript Application Logic -->
+    <!-- Interactive Background Script -->
     <script>
-        // Interactive Hero Canvas Background (Retro Grid + Floating Particles)
-        const canvas = document.getElementById('hero-canvas');
+        const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 40;
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -701,250 +277,47 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Particles array
-        const particles = [];
-        const particleCount = Math.min(window.innerWidth > 768 ? 60 : 30, 100);
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 1,
-                vy: (Math.random() - 0.5) * 1,
-                radius: Math.random() * 2 + 1,
-                color: Math.random() > 0.5 ? '#10b981' : '#06b6d4'
-            });
-        }
-
-        let gridOffset = 0;
-
-        function animateCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw Perspective Retro Grid at bottom/background
-            ctx.strokeStyle = 'rgba(16, 185, 129, 0.07)';
-            ctx.lineWidth = 1;
-            
-            gridOffset = (gridOffset + 0.5) % 40;
-            
-            // Vertical grid lines
-            for (let x = 0; x < canvas.width; x += 40) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, canvas.height);
-                ctx.stroke();
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
             }
-
-            // Horizontal moving grid lines
-            for (let y = gridOffset; y < canvas.height; y += 40) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
             }
-
-            // Draw and update particles
-            particles.forEach((p, index) => {
-                p.x += p.vx;
-                p.y += p.vy;
-
-                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
+            draw() {
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.3)';
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = p.color;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
-
-                // Connect nearby particles
-                for (let j = index + 1; j < particles.length; j++) {
-                    const p2 = particles[j];
-                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if (dist < 100) {
-                        ctx.strokeStyle = `rgba(6, 182, 212, ${0.15 * (1 - dist / 100)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                }
-            });
-
-            requestAnimationFrame(animateCanvas);
-        }
-        animateCanvas();
-
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Project Filtering
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const projectCards = document.querySelectorAll('.project-card');
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => {
-                    b.classList.remove('bg-gaming-accent', 'text-gaming-900');
-                    b.classList.add('bg-gaming-700', 'text-gray-300');
-                });
-                btn.classList.remove('bg-gaming-700', 'text-gray-300');
-                btn.classList.add('bg-gaming-accent', 'text-gaming-900');
-
-                const filter = btn.getAttribute('data-filter');
-                projectCards.forEach(card => {
-                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // Project Modal Details Database
-        const projectDetails = {
-            aether: {
-                title: "Aether Blade (Action RPG)",
-                engine: "Unreal Engine 5 (C++ & Blueprints)",
-                role: "Lead Gameplay Programmer",
-                description: "Aether Blade is a high-octane souls-lite action RPG featuring complex melee combo chaining, precise hitbox registration, and dynamic enemy behavior trees. As lead gameplay programmer, I architected the core character movement controller, weapon stamina system, and boss encounter triggers.",
-                features: [
-                    "Custom C++ Gameplay Abilities Component (GAS)",
-                    "Frame-accurate hit detection & parry window calculations",
-                    "Behavior Tree AI with state-driven tactical flanking",
-                    "Optimized Niagara VFX particle pooling for spellcasting"
-                ],
-                image: "https://placehold.co/600x400/111827/10b981?text=Aether+Blade"
-            },
-            voxel: {
-                title: "Custom Voxel Sandbox Engine",
-                engine: "C++ / OpenGL / GLFW",
-                role: "Core Engine Programmer",
-                description: "Built from the ground up without third-party game engines. This custom renderer and voxel sandbox implements multi-threaded chunk generation, greedy meshing algorithm optimization, and an octree-based collision detection pipeline achieving steady 144+ FPS.",
-                features: [
-                    "Multi-threaded background chunk loader and generator",
-                    "Greedy meshing reducing triangle counts by over 70%",
-                    "Custom OpenGL shader pipeline with atmospheric scattering",
-                    "Dynamic lighting propagation and ambient occlusion"
-                ],
-                image: "https://placehold.co/600x400/111827/06b6d4?text=Voxel+Engine"
-            },
-            neon: {
-                title: "Neon Drifter (Cyberpunk Metroidvania)",
-                engine: "Unity Engine (C#)",
-                role: "Solo Developer & Pixel Artist",
-                description: "A commercial indie cyberpunk platformer featuring wall-sliding, dash combat, and neon-soaked pixel art aesthetics. I designed all game code, levels, sound effects, and 64x64 pixel art sprite animations.",
-                features: [
-                    "Custom 2D kinematic character controller with Coyote time",
-                    "Dynamic CRT post-processing shader & bloom effects",
-                    "Modular save/load state serialization system",
-                    "Over 40 hand-crafted pixel art animations"
-                ],
-                image: "https://placehold.co/600x400/111827/8b5cf6?text=Neon+Drifter"
-            },
-            ecs: {
-                title: "Data-Oriented Inventory & Loot System",
-                engine: "C++ / Custom ECS",
-                role: "Systems Architect",
-                description: "An ultra-performant, cache-friendly Entity-Component-System inventory and equipment database designed for large-scale MMORPGs or loot-driven ARPGs. Capable of handling massive item transactions and stat recalculations instantly.",
-                features: [
-                    "Cache-contiguous data layouts for maximum CPU L1/L2 cache hits",
-                    "O(1) item lookup and stack pooling mechanisms",
-                    "Thread-safe asynchronous trade and loot generation",
-                    "Comprehensive unit test suite achieving 98% code coverage"
-                ],
-                image: "https://placehold.co/600x400/111827/10b981?text=ECS+Inventory"
-            },
-            chrono: {
-                title: "Chrono Tactics (Turn-Based Strategy)",
-                engine: "Unity Engine (C#)",
-                role: "Gameplay Engineer",
-                description: "A tactical turn-based strategy game where players can manipulate the timeline to rewind turns and foresee enemy attacks. Features hexagonal grid pathfinding and a robust command pattern architecture.",
-                features: [
-                    "Command Pattern based timeline state recorder & replayer",
-                    "A* Pathfinding algorithm adapted for hexagonal elevation grids",
-                    "Turn queue scheduler with priority action points",
-                    "Tactical UI wireframe and responsive grid highlights"
-                ],
-                image: "https://placehold.co/600x400/111827/06b6d4?text=Chrono+Tactics"
-            },
-            roguelike: {
-                title: "Retro Roguelike UI & Tilemaps",
-                engine: "Godot Engine (GDScript)",
-                role: "Technical Designer",
-                description: "A modular UI framework and procedural dungeon generator tailored for classic turn-based roguelikes. Features BSP (Binary Space Partitioning) dungeon generation, animated tilemaps, and custom inventory drag-and-drop mechanics.",
-                features: [
-                    "BSP dungeon generation with automated room connection",
-                    "Modular UI theme pack designed for retro game interfaces",
-                    "Custom fog-of-war visibility raycasting algorithm",
-                    "Extensible item database with JSON data binding"
-                ],
-                image: "https://placehold.co/600x400/111827/f59e0b?text=Dungeon+Crawler"
             }
-        };
-
-        const modal = document.getElementById('project-modal');
-        const modalContent = document.getElementById('modal-content');
-
-        function openModal(projectId) {
-            const data = projectDetails[projectId];
-            if (!data) return;
-
-            modalContent.innerHTML = `
-                <div class="relative h-64 sm:h-72 rounded-xl overflow-hidden mb-6 bg-gray-900 border border-gray-700">
-                    <img src="${data.image}" alt="${data.title}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/111827/ffffff?text=Image+Unavailable'">
-                    <div class="absolute bottom-3 left-3 bg-gaming-900/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-gaming-accent border border-gaming-accent/30">
-                        ${data.engine}
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2 mb-2">
-                    <span class="px-2.5 py-0.5 rounded bg-gaming-cyan/10 text-gaming-cyan text-xs font-mono font-semibold">${data.role}</span>
-                </div>
-                <h3 class="text-2xl sm:text-3xl font-bold mb-3 text-white">${data.title}</h3>
-                <p class="text-gray-300 text-sm sm:text-base mb-6 leading-relaxed">${data.description}</p>
-                
-                <h4 class="text-sm font-bold text-gaming-accent font-mono uppercase tracking-wider mb-3">// Key Technical Features</h4>
-                <ul class="space-y-2 mb-8">
-                    ${data.features.map(f => `<li class="flex items-start text-sm text-gray-300"><i class="fa-solid fa-chevron-right text-gaming-accent mt-1 mr-2.5 text-xs"></i><span>${f}</span></li>`).join('')}
-                </ul>
-
-                <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-700">
-                    <button onclick="closeModal()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gaming-700 hover:bg-gaming-600 text-white font-bold transition-all text-sm">
-                        Close Modal
-                    </button>
-                </div>
-            `;
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
         }
 
-        function closeModal() {
-            modal.classList.add('hidden');
-            document.body.style.overflow = 'auto';
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
         }
+        initParticles();
 
-        // Close modal on outside click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-
-        // Contact Form Submission Handler
-        function handleContactSubmit(event) {
-            event.preventDefault();
-            const form = document.getElementById('contact-form');
-            const successMsg = document.getElementById('form-success');
-            
-            form.reset();
-            successMsg.classList.remove('hidden');
-            setTimeout(() => {
-                successMsg.classList.add('hidden');
-            }, 5000);
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
         }
+        animate();
     </script>
 </body>
 </html>
